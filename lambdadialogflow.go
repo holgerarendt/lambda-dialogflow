@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/golang/protobuf/jsonpb"
 	df "google.golang.org/genproto/googleapis/cloud/dialogflow/v2"
 )
@@ -112,4 +113,9 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 		},
 	}
 	return resp, err
+}
+
+// Start listening on requests
+func Start() {
+	lambda.Start(HandleRequest)
 }
