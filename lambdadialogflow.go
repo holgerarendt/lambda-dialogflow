@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/golang/protobuf/jsonpb"
+	_structpb "github.com/golang/protobuf/ptypes/struct"
 	df "google.golang.org/genproto/googleapis/cloud/dialogflow/v2"
 )
 
@@ -46,9 +47,21 @@ func (w *Agent) Session() string {
 	return w.req.Session
 }
 
+func (w *Agent) getField(name string) *_structpb.Value {
+	f := w.req.QueryResult.Parameters.GetFields()[name]
+	if f != nil {
+		return f
+	}
+	return w.req.OriginalDetectIntentRequest.Payload.GetFields()[name]
+}
+
 // GetStringParam returns a string parameter
 func (w *Agent) GetStringParam(name string) string {
-	return w.req.QueryResult.Parameters.GetFields()[name].GetStringValue()
+	f := w.getField(name)
+	if f != nil {
+		return f.GetStringValue()
+	}
+	return ""
 }
 
 // GetNumberParam returns a float64 parameter
