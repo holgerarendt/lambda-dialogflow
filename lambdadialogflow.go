@@ -66,7 +66,11 @@ func (w *Agent) GetStringParam(name string) string {
 
 // GetNumberParam returns a float64 parameter
 func (w *Agent) GetNumberParam(name string) float64 {
-	return w.req.QueryResult.Parameters.GetFields()[name].GetNumberValue()
+	f := w.getField(name)
+	if f != nil {
+		return f.GetNumberValue()
+	}
+	return 0
 }
 
 // Say lets the agent return a message to the user
