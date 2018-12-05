@@ -3,7 +3,6 @@ package lambdadialogflow
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -115,11 +114,11 @@ func HandleRequest(req events.APIGatewayProxyRequest) (events.APIGatewayProxyRes
 	webhookHandler(w)
 
 	var buf bytes.Buffer
-	body, err := json.Marshal(w.res)
+	marshaler := &jsonpb.Marshaler{}
+	err = marshaler.Marshal(&buf, w.res)
 	if err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: 500}, err
 	}
-	json.HTMLEscape(&buf, body)
 
 	resp := events.APIGatewayProxyResponse{
 		StatusCode:      200,
