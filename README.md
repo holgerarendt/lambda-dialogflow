@@ -9,7 +9,8 @@ import (
 )
 
 func hello(agent *ld.Agent) {
-	agent.Say("Hello World")
+	name := agent.GetStringParam("name")
+	agent.Say("Hello, " + name)
 }
 
 func main() {
