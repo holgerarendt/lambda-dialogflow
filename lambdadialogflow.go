@@ -72,6 +72,25 @@ func (w *Agent) GetNumberParam(name string) float64 {
 	return 0
 }
 
+// AddPayload adds a strint/value to the response payload
+func (w *Agent) AddPayload(name, value string) {
+	stringValue := &_structpb.Value{
+		Kind: &_structpb.Value_StringValue{
+			StringValue: value,
+		},
+	}
+
+	if w.Response().Payload != nil && w.Response().Payload.Fields != nil {
+		w.Response().Payload.Fields[name] = stringValue
+	} else {
+		w.Response().Payload = &_structpb.Struct{
+			Fields: map[string]*_structpb.Value{
+				name: stringValue,
+			},
+		}
+	}
+}
+
 // Say lets the agent return a message to the user
 func (w *Agent) Say(someText string) {
 	w.res.FulfillmentText = someText
