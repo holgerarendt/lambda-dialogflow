@@ -3,6 +3,7 @@ package lambdadialogflow
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"strings"
 
@@ -89,6 +90,12 @@ func (w *Agent) AddPayload(name, value string) {
 			},
 		}
 	}
+}
+
+// AddJSONPayloadBase64 base64 encodes the value before adding it as payload
+func (w *Agent) AddJSONPayloadBase64(name, value string) {
+	encoded := base64.StdEncoding.EncodeToString([]byte(value))
+	w.AddPayload(name, encoded)
 }
 
 // Say lets the agent return a message to the user
